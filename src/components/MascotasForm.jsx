@@ -12,6 +12,7 @@ function MascotasForm() {
     const [edad, setEdad] = useState('');
     const [raza, setRaza] = useState('');
     const [sexo, setSexo] = useState('');
+    const navigate = useNavigate();
 
     const [estadoChoices, setEstadoChoices] = useState([]);
     const [tipoAnimalChoices, setTipoAnimalChoices] = useState([]);
@@ -72,19 +73,18 @@ function MascotasForm() {
             fetchTipoAnimalChoices(),
             fetchTamanoChoices(),
             fetchSexoChoices()
+
         ]);
     }, []);
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const navigate = useNavigate();
 
         // Aquí puedes manejar el envío del formulario, por ejemplo, enviar los datos a un servidor o actualizar el estado de la aplicación.
         console.log("Formulario enviado");
 
         // Validaciones
-
 
         // Crear FormData para enviar la imagen y los demás datos
         const formData = new FormData();
@@ -128,4 +128,4 @@ function MascotasForm() {
     )
 }
 
-export default MasctotasForm;
+export default MascotasForm;
