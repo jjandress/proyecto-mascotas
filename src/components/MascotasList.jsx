@@ -49,6 +49,23 @@ function MascotasList() {
         }
     };
 
+    const deleteComentario = async (id) => {
+    const confirmar = window.confirm("¿Seguro que deseas eliminar este comentario?");
+
+    if (!confirmar) return;
+
+    try {
+        const response = await apiMascotas.delete(`comentarios/${id}/`);
+
+        if (response.status === 204) {
+            setListadoComentarios((prev) =>
+                prev.filter((comentario) => comentario.id !== id)
+            );
+        }
+    } catch (error) {
+        console.log(error.response);
+    }
+};
 
     useEffect(() => {
         const fetchMascotas = async () => {
@@ -90,6 +107,7 @@ function MascotasList() {
                     listaCom={listadoComentarios}
                     deleteMascotas={deleteMascotas}
                     agregarComentario={agregarComentario}
+                    deleteComentario={deleteComentario}
                 />
             </div>
         </article>

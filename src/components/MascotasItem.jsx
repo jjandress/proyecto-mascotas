@@ -45,6 +45,9 @@ return (
                                         <p>
                                             <strong>{comentario.autor}:</strong> {comentario.contenido}
                                         </p>
+                                        <button onClick={() => deleteComentario(comentario.id)}>
+                                            Eliminar comentario
+                                        </button>
                                     </div>
                                 ))
                             }
