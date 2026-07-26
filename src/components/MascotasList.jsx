@@ -28,6 +28,28 @@ function MascotasList() {
     }
 };
 
+    const agregarComentario = async (mascota, autor, contenido) => {
+        if (!contenido.trim()) {
+            alert("El comentario no puede estar vacío");
+            return;
+        }
+
+        try {
+            const response = await apiMascotas.post("comentarios/", {
+                mascota,
+                autor,
+                contenido,
+            });
+
+            if (response.status === 201) {
+                setListadoComentarios((prev) => [...prev, response.data]);
+            }
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
+
+
     useEffect(() => {
         const fetchMascotas = async () => {
             // Peticion api hacia mascotas
@@ -63,7 +85,12 @@ function MascotasList() {
         <article>
             <h3>Mascotas List</h3>
             <div>
-                <MascotasItem listado={listadoMascotas} listaCom={listadoComentarios}  deleteMascotas={deleteMascotas}/>
+                <MascotasItem
+                    listado={listadoMascotas}
+                    listaCom={listadoComentarios}
+                    deleteMascotas={deleteMascotas}
+                    agregarComentario={agregarComentario}
+                />
             </div>
         </article>
     )

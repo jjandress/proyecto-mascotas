@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function MascotasItem({listado, listaCom, deleteMascotas}) {
+function MascotasItem({listado, listaCom, deleteMascotas, agregarComentario, deleteComentario}) {
     const [detalleId, setDetalleId] = useState(null);
     const navigate = useNavigate();
 
-    return (
+    const [autor, setAutor] = useState("");
+    const [contenido, setContenido] = useState("");
+
+    
+return (
         <>
             {listado.map((mascota) => (
                 <div key={mascota.id}>
@@ -34,10 +38,46 @@ function MascotasItem({listado, listaCom, deleteMascotas}) {
                             <p>Tamaño:{mascota.tamano}</p>
 
                             <h5>Comentarios:</h5>
-                            {listaCom.filter(comentario => comentario.mascota === mascota.id).map(comentario => (
-                                    <p key={comentario.id}>{comentario.contenido}</p>
+                            {listaCom
+                                .filter(comentario => comentario.mascota === mascota.id)
+                                .map(comentario => (
+                                    <div key={comentario.id}>
+                                        <p>
+                                            <strong>{comentario.autor}:</strong> {comentario.contenido}
+                                        </p>
+                                    </div>
                                 ))
                             }
+
+                            <h5>Agregar comentario</h5>
+
+                            <input
+                                type="text"
+                                placeholder="Autor"
+                                value={autor}
+                                onChange={(e) => setAutor(e.target.value)}
+                            />
+
+                            <input
+                                type="text"
+                                placeholder="Comentario"
+                                value={contenido}
+                                onChange={(e) => setContenido(e.target.value)}
+                            />
+
+                            <button
+                                onClick={() => {
+                                    if (!autor.trim() || !contenido.trim()) {
+                                        alert("Completa autor y comentario");
+                                        return;
+                                    }
+                                    agregarComentario(mascota.id, autor, contenido);
+                                    setAutor("");
+                                    setContenido("");
+                                }}
+                            >
+                                Comentar
+                            </button>
                         </div>
                     )}
                 </div>
