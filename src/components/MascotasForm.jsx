@@ -73,6 +73,7 @@ function MascotasForm() {
             fetchTipoAnimalChoices(),
             fetchTamanoChoices(),
             fetchSexoChoices()
+
         ]);
     }, []);
 

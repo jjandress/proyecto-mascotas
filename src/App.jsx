@@ -17,7 +17,7 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/Mascotas" element={<MascotasPage />}>
+          <Route path="/mascotas" element={<MascotasPage />}>
             <Route path="formulario" element={<MascotasForm />} />
             <Route path="listado" element={<MascotasList />} />
             <Route path="editar/:id" element={<MascotasEdit />} />
