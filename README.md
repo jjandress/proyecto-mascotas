@@ -14,3 +14,9 @@ The React Compiler is not enabled on this template because of its impact on dev 
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+Documentación:
+    Error de ejecución: "Uncaught (in promise) Error: Invalid hook call. Hooks can only be called inside of the body of a function component."
+    Dirección del problema: handleSubmit (MascotasForm.jsx:82:26)
+    Solución: El hook useNavigate debe ejecutarse directamente en el componente en este caso MascotasForm() y no dentro de funciones normales como en handleSumbit.
+    Herramienta IA: Copilot

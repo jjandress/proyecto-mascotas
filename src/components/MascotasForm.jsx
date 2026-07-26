@@ -12,6 +12,7 @@ function MascotasForm() {
     const [edad, setEdad] = useState('');
     const [raza, setRaza] = useState('');
     const [sexo, setSexo] = useState('');
+    const navigate = useNavigate();
 
     const [estadoChoices, setEstadoChoices] = useState([]);
     const [tipoAnimalChoices, setTipoAnimalChoices] = useState([]);
@@ -78,7 +79,6 @@ function MascotasForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const navigate = useNavigate();
 
         // Aquí puedes manejar el envío del formulario, por ejemplo, enviar los datos a un servidor o actualizar el estado de la aplicación.
         console.log("Formulario enviado");
