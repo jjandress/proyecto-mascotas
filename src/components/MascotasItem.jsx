@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function MascotasItem({listado, listaCom}) {
     const [detalleId, setDetalleId] = useState(null);
+    const navigate = useNavigate();
 
     return (
         <>
@@ -15,6 +17,10 @@ function MascotasItem({listado, listaCom}) {
 
                     <button onClick={() => setDetalleId(mascota.id)}>
                         Ver detalles
+                    </button>
+
+                    <button onClick={() => navigate(`/mascotas/editar/${mascota.id}`)}>
+                        Editar
                     </button>
 
                     {detalleId === mascota.id && (
