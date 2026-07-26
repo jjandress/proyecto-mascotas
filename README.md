@@ -20,3 +20,6 @@ Documentación:
     Dirección del problema: handleSubmit (MascotasForm.jsx:82:26)
     Solución: El hook useNavigate debe ejecutarse directamente en el componente en este caso MascotasForm() y no dentro de funciones normales como en handleSumbit.
     Herramienta IA: Copilot
+
+    Sintaxis para comentarios:
+    Para traer la lista de comentarios de cada mascota se debe recorrer la lista y antes filtrar la busqueda de la mascota por su id, luego solicite ayuda a la herramienta ChatGPT para que me construyera la idea.

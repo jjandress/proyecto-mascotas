@@ -85,7 +85,6 @@ function MascotasForm() {
 
         // Validaciones
 
-
         // Crear FormData para enviar la imagen y los demás datos
         const formData = new FormData();
         formData.append('nombre', nombre);
