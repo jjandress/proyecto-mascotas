@@ -6,6 +6,28 @@ function MascotasList() {
     const [listadoMascotas, setListadoMascotas] = useState([]);
     const [listadoComentarios, setListadoComentarios] = useState([]);
 
+    const deleteMascotas = async (id) => {
+    const confirmar = window.confirm(
+        "¿Estás seguro de que deseas eliminar esta mascota?"
+    );
+
+    if (!confirmar) return;
+
+    try {
+        const response = await apiMascotas.delete(`mascotas/${id}/`);
+
+        if (response.status === 204) {
+            setListadoMascotas((prev) =>
+                prev.filter((mascota) => mascota.id !== id)
+            );
+            alert("Mascota eliminada correctamente.");
+        }
+    } catch (error) {
+        console.log(error.response);
+        alert("Ocurrió un error al eliminar la mascota.");
+    }
+};
+
     useEffect(() => {
         const fetchMascotas = async () => {
             // Peticion api hacia mascotas
@@ -41,7 +63,7 @@ function MascotasList() {
         <article>
             <h3>Mascotas List</h3>
             <div>
-                <MascotasItem listado={listadoMascotas} listaCom={listadoComentarios} />
+                <MascotasItem listado={listadoMascotas} listaCom={listadoComentarios}  deleteMascotas={deleteMascotas}/>
             </div>
         </article>
     )

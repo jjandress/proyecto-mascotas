@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function MascotasItem({listado, listaCom}) {
+function MascotasItem({listado, listaCom, deleteMascotas}) {
     const [detalleId, setDetalleId] = useState(null);
     const navigate = useNavigate();
 
@@ -21,6 +21,9 @@ function MascotasItem({listado, listaCom}) {
 
                     <button onClick={() => navigate(`/mascotas/editar/${mascota.id}`)}>
                         Editar
+                    </button>
+                    <button onClick={() => deleteMascotas(mascota.id)}>
+                        Eliminar
                     </button>
 
                     {detalleId === mascota.id && (
