@@ -4,6 +4,7 @@ import apiMascotas from "../api/apiMascotas";
 
 function MascotasList() {
     const [listadoMascotas, setListadoMascotas] = useState([]);
+    const [listadoComentarios, setListadoComentarios] = useState([]);
 
     useEffect(() => {
         const fetchMascotas = async () => {
@@ -20,14 +21,27 @@ function MascotasList() {
             }
         }
 
+        const fetchComentarios = async () => {
+            try {
+                const response = await apiMascotas.get("comentarios/");
+                console.log(response.data);
+                if (response.status === 200) {
+                    setListadoComentarios(response.data);
+                }
+            } catch (error) {
+                console.log(error.response);
+            }
+        }
+
         fetchMascotas();
+        fetchComentarios();
     }, []);
 
     return (
         <article>
             <h3>Mascotas List</h3>
             <div>
-                <MascotasItem listado={listadoMascotas} />
+                <MascotasItem listado={listadoMascotas} listaCom={listadoComentarios} />
             </div>
         </article>
     )
