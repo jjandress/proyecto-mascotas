@@ -11,6 +11,8 @@ function MascotasEdit() {
     const [tipoAnimalChoices, setTipoAnimalChoices] = useState([]);
     const [tamanoChoices, setTamanoChoices] = useState([]);
     const [sexoChoices, setSexoChoices] = useState([]);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchMascota = async () => {
@@ -90,6 +92,53 @@ function MascotasEdit() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const mostrarError = (mensaje) => {
+            setError(mensaje);
+
+            setTimeout(() => {
+                setError("");
+            }, 3000);
+        };
+
+        // Validaciones
+        if (!mascota.nombre || mascota.nombre.trim() === "") {
+            mostrarError("Escriba el nombre de su mascota")
+            return;
+        }
+
+        if (mascota.nombre.length > 100) {
+            mostrarError("El nombre de la mascota no puede superar los 100 caracteres.");
+            return;
+        }
+
+        const regexNombre = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+        if (!regexNombre.test(mascota.nombre)) {
+            mostrarError("El nombre solo puede contener letras y espacios.");
+            return;
+        }
+
+        if (!mascota.descripcion || mascota.descripcion.trim() === "") {
+            mostrarError("Describa a su mascota.")
+            return;
+        }
+
+        if (mascota.raza && mascota.raza.length > 100) {
+            mostrarError("La raza de la mascota no puede superar los 100 caracteres.");
+            return;
+        }
+
+        const edadNum = Number(mascota.edad);
+
+        if (!Number.isInteger(edadNum)) {
+            mostrarError("Digite la edad sin decimales.")
+            return;
+        }
+
+        if (edadNum < 0) {
+            mostrarError("Digite una edad real.");
+            return;
+        }        
+
         const datos = {
             nombre: mascota.nombre,
             descripcion: mascota.descripcion,
@@ -101,53 +150,91 @@ function MascotasEdit() {
             sexo: mascota.sexo
         }
 
+        setLoading(true);
+
         try {
             const response =  await apiMascotas.patch(`mascotas/${id}/`, datos);
             console.log(response);
+            if (response.status === 200) {
+                alert("Mascota actualizada");
+            }
             navigate("/mascotas/listado");
 
         } catch (error) {
             console.log(error.response.data);
+            const status = error.response?.status;
+            const data = error.response?.data;
+            switch (status) {
+                case 400:
+                    if (data?.nombre || data?.descripcion || data?.imagen) {
+                        setError("Debes completar nombre, descripción e imagen.");
+                    } else {
+                        setError("Error en los datos enviados.");
+                    }
+                    break;
+                case 404:
+                    setError("Recurso no encontrado.");
+                    break;
+                default:
+                setError("Error al guardar la mascota.");
+            }
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input name="nombre" value={mascota.nombre || ""} onChange={handleChange} />
-            <input name="descripcion" value={mascota.descripcion || ""} onChange={handleChange} />
-            <input name="raza" value={mascota.raza || ""} onChange={handleChange} />
-            <input name="edad" value={mascota.edad || ""} onChange={handleChange} />
-            <select name="estado" value={mascota.estado || ""} onChange={handleChange}>
-                {estadoChoices.map((choice) => (
-                    <option key={choice.value} value={choice.value}>
-                        {choice.label}
-                    </option>
-                ))}
-            </select>
-            <select name="tipo_animal" value={mascota.tipo_animal || ""} onChange={handleChange}>
-                {tipoAnimalChoices.map((choice) => (
-                    <option key={choice.value} value={choice.value}>
-                        {choice.label}
-                    </option>
-                ))}
-            </select>
-            <select name="tamano" value={mascota.tamano || ""} onChange={handleChange}>
-                {tamanoChoices.map((choice) => (
-                    <option key={choice.value} value={choice.value}>
-                        {choice.label}
-                    </option>
-                ))}
-            </select>
-            <select name="sexo" value={mascota.sexo || ""} onChange={handleChange}>
-                {sexoChoices.map((choice) => (
-                    <option key={choice.value} value={choice.value}>
-                        {choice.label}
-                    </option>
-                ))}
-            </select>
+        <div className="container py-4" style={{ maxWidth: "600px" }}>
+            <form onSubmit={handleSubmit} className="card p-4 shadow-sm">
+                <h3 className="text-center mb-4">
+                    Editar Mascota
+                </h3>
+                <input className="form-control mb-3" type="text" name="nombre" placeholder="Nombre" value={mascota.nombre || ""} onChange={handleChange} />
+                <input className="form-control mb-3" type="text" name="descripcion" placeholder="Descripción" value={mascota.descripcion || ""} onChange={handleChange} />
+                <input className="form-control mb-3" type="text" name="raza" placeholder="Raza" value={mascota.raza || ""} onChange={handleChange} />
+                <input className="form-control mb-3" type="number" name="edad" placeholder="Edad" value={mascota.edad || ""} onChange={handleChange} />
+                <select className="form-select mb-3" name="estado" value={mascota.estado || ""} onChange={handleChange}>
+                    {estadoChoices.map((choice) => (
+                        <option key={choice.value} value={choice.value}>
+                            {choice.label}
+                        </option>
+                    ))}
+                </select>
+                <select className="form-select mb-3" name="tipo_animal" value={mascota.tipo_animal || ""} onChange={handleChange}>
+                    {tipoAnimalChoices.map((choice) => (
+                        <option key={choice.value} value={choice.value}>
+                            {choice.label}
+                        </option>
+                    ))}
+                </select>
+                <select className="form-select mb-3" name="tamano" value={mascota.tamano || ""} onChange={handleChange}>
+                    {tamanoChoices.map((choice) => (
+                        <option key={choice.value} value={choice.value}>
+                            {choice.label}
+                        </option>
+                    ))}
+                </select>
+                <select className="form-select mb-4" name="sexo" value={mascota.sexo || ""} onChange={handleChange}>
+                    {sexoChoices.map((choice) => (
+                        <option key={choice.value} value={choice.value}>
+                            {choice.label}
+                        </option>
+                    ))}
+                </select>
 
-            <button type="submit">Actualizar</button>
-        </form>
+                <button type="submit" className="btn btn-warning w-100" disabled={loading}>
+                    {loading?(
+                        <>
+                            <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            Actualizando...
+                        </>
+                    ):(
+                        <>Actualizar</>
+                    )}
+                </button>
+                <p> {error} </p>
+            </form>
+        </div>
     )
 }
 
