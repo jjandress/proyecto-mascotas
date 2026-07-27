@@ -105,27 +105,37 @@ function MascotasForm() {
     }
 
     return (
-        <form onSubmit={e => handleSubmit(e)} encType="multipart/form-data">
-            <input type="text" placeholder="Nombre" onChange={e => setNombre(e.target.value)}/>
-            <input type="text" placeholder="Descripción" onChange={e => setDescripcion(e.target.value)}/>
-            <input type="text" placeholder="Raza" onChange={e => setRaza(e.target.value)}/>
-            <input type="number" placeholder="Edad" onChange={e => setEdad(e.target.value)}/>
-            <select onChange={e => setEstado(e.target.value)}>
-                {estadoChoices.map((choice) => (<option key={choice.value} value={choice.value}>{choice.label}</option>))}
-            </select>
-            <select onChange={e => setTipoAnimal(e.target.value)}>
-                {tipoAnimalChoices.map((choice) => (<option key={choice.value} value={choice.value}>{choice.label}</option>))}
-            </select>
-            <select onChange={e => setTamano(e.target.value)}>
-                {tamanoChoices.map((choice) => (<option key={choice.value} value={choice.value}>{choice.label}</option>))}
-            </select>
-            <select onChange={e => setSexo(e.target.value)}>
-                {sexoChoices.map((choice) => (<option key={choice.value} value={choice.value}>{choice.label}</option>))}
-            </select>
-            <input onChange={e => setImagen(e.target.files[0])} type="file" placeholder="Imagen" />
-            <button type="submit">Guardar</button>
-        </form >
-    )
+        <div className="container py-4" style={{ maxWidth: "600px" }}>
+            <form onSubmit={e => handleSubmit(e)} encType="multipart/form-data" className="card p-4 shadow-sm">
+                <h3 className="text-center mb-4">Registrar Mascota</h3>
+
+                <input type="text" className="form-control mb-3" placeholder="Nombre" onChange={e => setNombre(e.target.value)} />
+                <input type="text" className="form-control mb-3" placeholder="Descripción" onChange={e => setDescripcion(e.target.value)} />
+                <input type="text" className="form-control mb-3" placeholder="Raza" onChange={e => setRaza(e.target.value)} />
+                <input type="number" className="form-control mb-3" placeholder="Edad" onChange={e => setEdad(e.target.value)} />
+
+                <select className="form-select mb-3" onChange={e => setEstado(e.target.value)}>
+                    {estadoChoices.map(choice => <option key={choice.value} value={choice.value}>{choice.label}</option>)}
+                </select>
+
+                <select className="form-select mb-3" onChange={e => setTipoAnimal(e.target.value)}>
+                    {tipoAnimalChoices.map(choice => <option key={choice.value} value={choice.value}>{choice.label}</option>)}
+                </select>
+
+                <select className="form-select mb-3" onChange={e => setTamano(e.target.value)}>
+                    {tamanoChoices.map(choice => <option key={choice.value} value={choice.value}>{choice.label}</option>)}
+                </select>
+
+                <select className="form-select mb-3" onChange={e => setSexo(e.target.value)}>
+                    {sexoChoices.map(choice => <option key={choice.value} value={choice.value}>{choice.label}</option>)}
+                </select>
+
+                <input type="file" className="form-control mb-4" onChange={e => setImagen(e.target.files[0])} />
+
+                <button type="submit" className="btn btn-primary">Guardar</button>
+            </form>
+        </div>
+    );
 }
 
 export default MascotasForm;
