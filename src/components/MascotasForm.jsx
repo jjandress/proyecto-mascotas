@@ -8,10 +8,10 @@ function MascotasForm() {
     const [tipoAnimal, setTipoAnimal] = useState('');
     const [estado, setEstado] = useState('');
     const [imagen, setImagen] = useState('');
-    const [tamano, setTamano] = useState('desconocido');
+    const [tamano, setTamano] = useState('');
     const [edad, setEdad] = useState('');
     const [raza, setRaza] = useState('');
-    const [sexo, setSexo] = useState('desconocido');
+    const [sexo, setSexo] = useState('');
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -52,6 +52,11 @@ function MascotasForm() {
                 if (response.status === 200) {
                     setTamanoChoices(response.data.tamano);
                     console.log(response.data.tamano);
+
+                    const desconocido = response.data.tamano.find(option => option.label.toLowerCase() === 'desconocido');
+                    if (desconocido) {
+                        setTamano(desconocido.value);
+                    }
                 }
             } catch (error) {
                 console.error("Error fetching tamano choices:", error);
@@ -64,6 +69,11 @@ function MascotasForm() {
                 if (response.status === 200) {
                     setSexoChoices(response.data.sexo);
                     console.log(response.data.sexo);
+
+                    const desconocido = response.data.sexo.find(option => option.label.toLowerCase() === 'desconocido');
+                    if (desconocido) {
+                        setSexo(desconocido.value);
+                    }
                 }
             } catch (error) {
                 console.error("Error fetching sexo choices:", error);
@@ -187,19 +197,19 @@ function MascotasForm() {
                 <input type="text" className="form-control mb-3" placeholder="Raza" onChange={e => setRaza(e.target.value)} />
                 <input type="number" className="form-control mb-3" placeholder="Edad" onChange={e => setEdad(e.target.value)} />
 
-                <select className="form-select mb-3" onChange={e => setEstado(e.target.value)}>
+                <select className="form-select mb-3" value={estado} onChange={e => setEstado(e.target.value)}>
                     {estadoChoices.map(choice => <option key={choice.value} value={choice.value}>{choice.label}</option>)}
                 </select>
 
-                <select className="form-select mb-3" onChange={e => setTipoAnimal(e.target.value)}>
+                <select className="form-select mb-3" value={tipoAnimal} onChange={e => setTipoAnimal(e.target.value)}>
                     {tipoAnimalChoices.map(choice => <option key={choice.value} value={choice.value}>{choice.label}</option>)}
                 </select>
 
-                <select className="form-select mb-3" onChange={e => setTamano(e.target.value)}>
+                <select className="form-select mb-3" value={tamano} onChange={e => setTamano(e.target.value)}>
                     {tamanoChoices.map(choice => <option key={choice.value} value={choice.value}>{choice.label}</option>)}
                 </select>
 
-                <select className="form-select mb-3" onChange={e => setSexo(e.target.value)}>
+                <select className="form-select mb-3" value={sexo} onChange={e => setSexo(e.target.value)}>
                     {sexoChoices.map(choice => <option key={choice.value} value={choice.value}>{choice.label}</option>)}
                 </select>
 
