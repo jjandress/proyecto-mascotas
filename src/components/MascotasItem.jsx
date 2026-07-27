@@ -17,12 +17,20 @@ function MascotasItem({
     return (
         <>
             {listado.map((mascota) => (
-                <div key={mascota.id} className="card mb-3 shadow-sm">
+                <div
+                    key={mascota.id}
+                    className="card shadow-sm mb-4 mx-auto"
+                    style={{ maxWidth: "700px" }}
+                >
                     <img
                         src={mascota.imagen}
                         alt={mascota.nombre}
                         className="card-img-top"
-                        style={{ maxHeight: "300px", objectFit: "cover" }}
+                        style={{
+                            maxHeight: "420px",
+                            objectFit: "contain",
+                            background: "#f8f9fa"
+                        }}
                     />
 
                     <div className="card-body">
