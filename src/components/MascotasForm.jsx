@@ -8,11 +8,13 @@ function MascotasForm() {
     const [tipoAnimal, setTipoAnimal] = useState('');
     const [estado, setEstado] = useState('');
     const [imagen, setImagen] = useState('');
-    const [tamano, setTamano] = useState('');
+    const [tamano, setTamano] = useState('desconocido');
     const [edad, setEdad] = useState('');
     const [raza, setRaza] = useState('');
-    const [sexo, setSexo] = useState('');
+    const [sexo, setSexo] = useState('desconocido');
     const navigate = useNavigate();
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const [estadoChoices, setEstadoChoices] = useState([]);
     const [tipoAnimalChoices, setTipoAnimalChoices] = useState([]);
@@ -80,11 +82,56 @@ function MascotasForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         // Aquí puedes manejar el envío del formulario, por ejemplo, enviar los datos a un servidor o actualizar el estado de la aplicación.
         console.log("Formulario enviado");
 
         // Validaciones
+        const mostrarError = (mensaje) => {
+            setError(mensaje);
+
+            setTimeout(() => {
+                setError("");
+            }, 3000);
+        };
+
+        // Validaciones
+        if (nombre.trim() === "") {
+            mostrarError("Escriba el nombre de su mascota")
+            return;
+        }
+
+        if (nombre.length > 100) {
+            mostrarError("El nombre de la mascota no puede superar los 100 caracteres.");
+            return;
+        }
+
+        const regexNombre = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+        if (!regexNombre.test(nombre)) {
+            mostrarError("El nombre solo puede contener letras y espacios.");
+            return;
+        }
+
+        if (descripcion.trim() === "") {
+            mostrarError("Describa a su mascota.")
+            return;
+        }
+
+        if (raza.length > 100) {
+            mostrarError("La raza de la mascota no puede superar los 100 caracteres.");
+            return;
+        }
+
+        const edadNum = Number(edad);
+
+        if (!Number.isInteger(edadNum)) {
+            mostrarError("Digite la edad sin decimales.")
+            return;
+        }
+
+        if (edadNum < 0) {
+            mostrarError("Digite una edad real.");
+            return;
+        }
 
         // Crear FormData para enviar la imagen y los demás datos
         const formData = new FormData();
@@ -98,11 +145,37 @@ function MascotasForm() {
         formData.append('raza', raza);
         formData.append('sexo', sexo);
 
-        const response = await apiMascotas.post('/mascotas/', formData);
+        setLoading(true);
 
-        console.log(response);
-        navigate('/mascotas/listado'); // Redirige a la página de listado después de enviar el formulario
-    }
+        try {
+            const response = await apiMascotas.post('/mascotas/', formData);
+            console.log(response);
+            if (response.status === 201) {
+                alert("Mascota creada exitosamente");
+            }
+            navigate('/mascotas/listado'); // Redirige a la página de listado después de enviar el formulario
+        } catch (error) {
+            console.log(error.response)
+            const status = error.response?.status;
+            const data = error.response?.data;
+            switch (status) {
+                case 400:
+                    if (data?.nombre || data?.descripcion || data?.imagen) {
+                        setError("Debes completar nombre, descripción e imagen.");
+                    } else {
+                        setError("Error en los datos enviados.");
+                    }
+                    break;
+                case 404:
+                    setError("Recurso no encontrado.");
+                    break;
+                default:
+                setError("Error al guardar la mascota.");
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="container py-4" style={{ maxWidth: "600px" }}>
@@ -132,7 +205,17 @@ function MascotasForm() {
 
                 <input type="file" className="form-control mb-4" onChange={e => setImagen(e.target.files[0])} />
 
-                <button type="submit" className="btn btn-primary">Guardar</button>
+                <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+                    {loading?(
+                        <>
+                            <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            Guardando...
+                        </>
+                    ):(
+                        <>Guardar</>
+                    )}
+                </button>
+                <p> {error} </p>
             </form>
         </div>
     );
