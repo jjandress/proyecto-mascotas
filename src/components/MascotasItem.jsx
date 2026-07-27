@@ -1,88 +1,164 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function MascotasItem({listado, listaCom, deleteMascotas, agregarComentario, deleteComentario}) {
+function MascotasItem({
+    listado,
+    listaCom,
+    deleteMascotas,
+    agregarComentario,
+    deleteComentario,
+}) {
     const [detalleId, setDetalleId] = useState(null);
-    const navigate = useNavigate();
-
     const [autor, setAutor] = useState("");
     const [contenido, setContenido] = useState("");
 
-    
-return (
+    const navigate = useNavigate();
+
+    return (
         <>
             {listado.map((mascota) => (
-                <div key={mascota.id}>
-                    <img src={mascota.imagen} alt={mascota.nombre} />
-                    <h4>{mascota.nombre}</h4>
-                    <p>{mascota.descripcion}</p>
-                    <p>{mascota.tipo_animal}</p>
-                    <p>{mascota.estado}</p>
+                <div key={mascota.id} className="card mb-3 shadow-sm">
+                    <img
+                        src={mascota.imagen}
+                        alt={mascota.nombre}
+                        className="card-img-top"
+                        style={{ maxHeight: "300px", objectFit: "cover" }}
+                    />
 
-                    <button onClick={() => setDetalleId(mascota.id)}>
-                        Ver detalles
-                    </button>
+                    <div className="card-body">
+                        <h4 className="card-title">{mascota.nombre}</h4>
 
-                    <button onClick={() => navigate(`/mascotas/editar/${mascota.id}`)}>
-                        Editar
-                    </button>
-                    <button onClick={() => deleteMascotas(mascota.id)}>
-                        Eliminar
-                    </button>
+                        <p className="card-text mb-1">{mascota.descripcion}</p>
+                        <p className="text-muted mb-3">
+                            {mascota.tipo_animal} • {mascota.estado}
+                        </p>
 
-                    {detalleId === mascota.id && (
-                        <div>
-                            <p>Edad:{mascota.edad}</p>
-                            <p>Raza:{mascota.raza}</p>
-                            <p>Sexo:{mascota.sexo}</p>
-                            <p>Tamaño:{mascota.tamano}</p>
-
-                            <h5>Comentarios:</h5>
-                            {listaCom
-                                .filter(comentario => comentario.mascota === mascota.id)
-                                .map(comentario => (
-                                    <div key={comentario.id}>
-                                        <p>
-                                            <strong>{comentario.autor}:</strong> {comentario.contenido}
-                                        </p>
-                                        <button onClick={() => deleteComentario(comentario.id)}>
-                                            Eliminar comentario
-                                        </button>
-                                    </div>
-                                ))
+                        <button
+                            className="btn btn-outline-primary btn-sm me-2"
+                            onClick={() =>
+                                setDetalleId(
+                                    detalleId === mascota.id ? null : mascota.id
+                                )
                             }
+                        >
+                            {detalleId === mascota.id
+                                ? "Ocultar"
+                                : "Ver detalles"}
+                        </button>
 
-                            <h5>Agregar comentario</h5>
+                        <button
+                            className="btn btn-outline-warning btn-sm me-2"
+                            onClick={() =>
+                                navigate(`/mascotas/editar/${mascota.id}`)
+                            }
+                        >
+                            Editar
+                        </button>
 
-                            <input
-                                type="text"
-                                placeholder="Autor"
-                                value={autor}
-                                onChange={(e) => setAutor(e.target.value)}
-                            />
+                        <button
+                            className="btn btn-outline-danger btn-sm"
+                            onClick={() => deleteMascotas(mascota.id)}
+                        >
+                            Eliminar
+                        </button>
 
-                            <input
-                                type="text"
-                                placeholder="Comentario"
-                                value={contenido}
-                                onChange={(e) => setContenido(e.target.value)}
-                            />
+                        {detalleId === mascota.id && (
+                            <div className="mt-4 border-top pt-3">
+                                <p className="mb-1">
+                                    <strong>Edad:</strong> {mascota.edad}
+                                </p>
+                                <p className="mb-1">
+                                    <strong>Raza:</strong> {mascota.raza}
+                                </p>
+                                <p className="mb-1">
+                                    <strong>Sexo:</strong> {mascota.sexo}
+                                </p>
+                                <p className="mb-3">
+                                    <strong>Tamaño:</strong> {mascota.tamano}
+                                </p>
 
-                            <button
-                                onClick={() => {
-                                    if (!autor.trim() || !contenido.trim()) {
-                                        alert("Completa autor y comentario");
-                                        return;
+                                <h6>Comentarios</h6>
+
+                                {listaCom
+                                    .filter(
+                                        (comentario) =>
+                                            comentario.mascota === mascota.id
+                                    )
+                                    .map((comentario) => (
+                                        <div
+                                            key={comentario.id}
+                                            className="border rounded p-2 mb-2"
+                                        >
+                                            <p className="mb-2">
+                                                <strong>
+                                                    {comentario.autor}
+                                                </strong>
+                                                : {comentario.contenido}
+                                            </p>
+
+                                            <button
+                                                className="btn btn-sm btn-outline-danger"
+                                                onClick={() =>
+                                                    deleteComentario(
+                                                        comentario.id
+                                                    )
+                                                }
+                                            >
+                                                Eliminar comentario
+                                            </button>
+                                        </div>
+                                    ))}
+
+                                <h6 className="mt-4">Agregar comentario</h6>
+
+                                <input
+                                    type="text"
+                                    className="form-control mb-2"
+                                    placeholder="Autor"
+                                    value={autor}
+                                    onChange={(e) =>
+                                        setAutor(e.target.value)
                                     }
-                                    agregarComentario(mascota.id, autor, contenido);
-                                    setAutor("");
-                                    setContenido("");
-                                }}
-                            >
-                                Comentar
-                            </button>
-                        </div>
-                    )}
+                                />
+
+                                <input
+                                    type="text"
+                                    className="form-control mb-3"
+                                    placeholder="Comentario"
+                                    value={contenido}
+                                    onChange={(e) =>
+                                        setContenido(e.target.value)
+                                    }
+                                />
+
+                                <button
+                                    className="btn btn-primary btn-sm"
+                                    onClick={() => {
+                                        if (
+                                            !autor.trim() ||
+                                            !contenido.trim()
+                                        ) {
+                                            alert(
+                                                "Completa autor y comentario"
+                                            );
+                                            return;
+                                        }
+
+                                        agregarComentario(
+                                            mascota.id,
+                                            autor,
+                                            contenido
+                                        );
+
+                                        setAutor("");
+                                        setContenido("");
+                                    }}
+                                >
+                                    Comentar
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             ))}
         </>
