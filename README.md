@@ -23,3 +23,8 @@ Documentación:
 
     Sintaxis para comentarios:
     Para traer la lista de comentarios de cada mascota se debe recorrer la lista y antes filtrar la busqueda de la mascota por su id, luego solicite ayuda a la herramienta ChatGPT para que me construyera la idea.
+
+    Ejecución del linter ESLint: 
+        1:25  error  'NavLink' is defined but never used  no-unused-vars
+        Sucede que eñ NavLink importado en el archivo App.jsx no se esta utilizando en el código.
+        Por lo que se procede a quitar del codigo.
