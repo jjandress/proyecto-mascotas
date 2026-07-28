@@ -1,20 +1,27 @@
-import { Link, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 
 function MascotasPage() {
-    return (
-        <section>
-            <h2>Página mascotas</h2>
+    const linkClase = ({ isActive }) =>
+        `nav-link ${isActive ? "active fw-bold" : ""}`;
 
-            <ul>
-                <li>
-                    <Link to="formulario">Formulario</Link>
+    return (
+        <section className="container py-4">
+            <h2 className="mb-3">Página mascotas</h2>
+
+            <ul className="nav mb-4">
+                <li className="nav-item">
+                    <NavLink to="formulario" className={linkClase}>
+                        Formulario
+                    </NavLink>
                 </li>
-                <li>
-                    <Link to="listado">Listado</Link>
+                <li className="nav-item">
+                    <NavLink to="listado" className={linkClase}>
+                        Listado
+                    </NavLink>
                 </li>
             </ul>
 
-            <Outlet /> {/* Renderiza el componente hijo correspondiente a la ruta anidada */}
+            <Outlet />
         </section>
     );
 }
