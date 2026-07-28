@@ -6,6 +6,41 @@ function MascotasList() {
     const [listadoMascotas, setListadoMascotas] = useState([]);
     const [listadoComentarios, setListadoComentarios] = useState([]);
 
+    const manejarErrorApi = (error, contexto = "") => {
+        if (!error.response) {
+            alert("No se pudo conectar con el servidor.");
+            return;
+        }
+
+        const { status, data } = error.response;
+        console.log(status, data);
+
+        switch (status) {
+            case 400:
+                if (data.detail) {
+                    alert(data.detail);
+                    break;
+                }
+                let mensaje = "";
+                for (const campo in data) {
+                    mensaje += `${campo}: ${data[campo]}\n`;
+                }
+                alert(mensaje);
+                break;
+            case 404:
+                alert(data.detail || "El recurso solicitado no existe.");
+                break;
+            case 405:
+                alert(data.detail || "Método no permitido en esta ruta.");
+                break;
+            case 415:
+                alert(data.detail || "Tipo de contenido no soportado.");
+                break;
+            default:
+                alert(`Ocurrió un error inesperado${contexto ? " al " + contexto : ""}.`);
+        }
+    };
+
     const deleteMascotas = async (id) => {
         const confirmar = window.confirm(
             "¿Estás seguro de que deseas eliminar esta mascota?"
@@ -23,8 +58,7 @@ function MascotasList() {
                 alert("Mascota eliminada correctamente.");
             }
         } catch (error) {
-            console.log(error.response);
-            alert("Ocurrió un error al eliminar la mascota.");
+            manejarErrorApi(error, "eliminar la mascota");
         }
     };
 
@@ -45,7 +79,7 @@ function MascotasList() {
                 setListadoComentarios((prev) => [...prev, response.data]);
             }
         } catch (error) {
-            console.log(error.response);
+            manejarErrorApi(error, "agregar el comentario");
         }
     };
 
@@ -63,34 +97,30 @@ function MascotasList() {
                 );
             }
         } catch (error) {
-            console.log(error.response);
+            manejarErrorApi(error, "eliminar el comentario");
         }
     };
 
     useEffect(() => {
         const fetchMascotas = async () => {
-            // Peticion api hacia mascotas
             try {
-                // Peticion GET
                 const response = await apiMascotas.get("mascotas/");
-                console.log(response);
                 if (response.status === 200) {
                     setListadoMascotas(response.data);
                 }
             } catch (error) {
-                console.log(error.response);
+                manejarErrorApi(error, "cargar las mascotas");
             }
         }
 
         const fetchComentarios = async () => {
             try {
                 const response = await apiMascotas.get("comentarios/");
-                console.log(response.data);
                 if (response.status === 200) {
                     setListadoComentarios(response.data);
                 }
             } catch (error) {
-                console.log(error.response);
+                manejarErrorApi(error, "cargar luogiguos comentarios");
             }
         }
 
