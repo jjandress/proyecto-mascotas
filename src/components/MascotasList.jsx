@@ -16,7 +16,7 @@ function MascotasList() {
         console.log(status, data);
 
         switch (status) {
-            case 400:
+            case 400: {
                 if (data.detail) {
                     alert(data.detail);
                     break;
@@ -27,6 +27,7 @@ function MascotasList() {
                 }
                 alert(mensaje);
                 break;
+            }
             case 404:
                 alert(data.detail || "El recurso solicitado no existe.");
                 break;
