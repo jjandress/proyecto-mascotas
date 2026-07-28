@@ -1,31 +1,37 @@
-# React + Vite
+# 🐾 Mascotas App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación web para gestión de mascotas, se consume api
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Instalación
 
-## React Compiler
+```bash
+npm install
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Disponible en `http://localhost:5173`
 
-## Expanding the ESLint configuration
+> Configura la URL base de la API en `api/apiMascotas.js` antes de ejecutar
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
 
-Documentación:
+## Stack
 
-    Error de ejecución: "Uncaught (in promise) Error: Invalid hook call. Hooks can only be called inside of the body of a function component."
-    Dirección del problema: handleSubmit (MascotasForm.jsx:82:26)
-    Solución: El hook useNavigate debe ejecutarse directamente en el componente en este caso MascotasForm() y no dentro de funciones normales como en handleSumbit.
-    Herramienta IA: Copilot
+Proyecto base React + Vite con HMR y ESLint
 
-    Sintaxis para comentarios:
-    Para traer la lista de comentarios de cada mascota se debe recorrer la lista y antes filtrar la busqueda de la mascota por su id, luego solicite ayuda a la herramienta ChatGPT para que me construyera la idea.
+---
 
-    Ejecución del linter ESLint: 
-        1:25  error  'NavLink' is defined but never used  no-unused-vars
-        Sucede que eñ NavLink importado en el archivo App.jsx no se esta utilizando en el código.
-        Por lo que se procede a quitar del codigo.
+## ESLint
+Se eliminó la importación no utilizada en `App.jsx`
+
+En `MascotasList.jsx`, la variable `mensaje` estaba declarada con `let` directamente dentro de un `case` del `switch`, sin bloque propio, lo que puede filtrar la declaración a otros `case`. Se solucionó envolviendo ese `case` entre llaves `{ }` para acotar su alcance.
+
+---
+
+## Herramientas de IA utilizadas
+
+**Copilot** — Error `Invalid hook call` en `handleSubmit` (MascotasForm.jsx:82:26). Solución: `useNavigate` debe ejecutarse en el cuerpo del componente, no dentro de `handleSubmit`
+
+**ChatGPT** — Ayuda para construir la lógica de filtrado de comentarios por id de mascota
